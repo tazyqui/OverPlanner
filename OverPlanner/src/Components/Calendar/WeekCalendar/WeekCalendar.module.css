@@ -49,12 +49,11 @@
     justify-content: center;
     font-size: 12px;
     border-bottom: 2px solid #eee;
-    
+
 }
 
 .dayColumn {
-    display: flex;
-    flex-direction: column;
+    position: relative;
 }
 
 .dayHeader {
@@ -80,6 +79,10 @@
     color: #777;
 }
 
+.timeCellsContainer {
+    position: relative;
+}
+
 .timeCell {
     height: var(--row-height);
     border-bottom: 3px solid #eee;
@@ -90,4 +93,14 @@
 
 .timeCell:hover {
     background-color: #e6f2ff;
+}
+
+.event-block {
+    position: absolute;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 4px;
+    padding: 4px;
+    width: 100%;
+    top: 0;
 }
