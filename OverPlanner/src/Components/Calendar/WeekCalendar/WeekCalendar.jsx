@@ -14,6 +14,40 @@ const addDays = (date, days) => {
   return newDate;
 };
 
+const getWeekHeader = (weekDates) => {
+  const firstDate = weekDates[0];
+  const lastDate = weekDates[6];
+
+  const firstMonth = firstDate.toLocaleString("default", { month: "long" });
+  const firstYear = firstDate.getFullYear();
+
+  const lastMonth = lastDate.toLocaleString("default", { month: "long" });
+  const lastYear = lastDate.getFullYear();
+
+  if (firstMonth === lastMonth && firstYear === lastYear) {
+    // Same month and year
+    return `${firstMonth} ${firstYear}`;
+  } else if (firstYear === lastYear) {
+    // Different months, same year
+    const shortFirstMonth = firstDate.toLocaleString("default", {
+      month: "short",
+    });
+    const shortLastMonth = lastDate.toLocaleString("default", {
+      month: "short",
+    });
+    return `${shortFirstMonth} - ${shortLastMonth} ${firstYear}`;
+  } else {
+    // Different years too
+    const shortFirstMonth = firstDate.toLocaleString("default", {
+      month: "short",
+    });
+    const shortLastMonth = lastDate.toLocaleString("default", {
+      month: "short",
+    });
+    return `${shortFirstMonth} ${firstYear} - ${shortLastMonth} ${lastYear}`;
+  }
+};
+
 // Function to get the position of the event in the grid
 const getEventPosition = (event) => {
   const date = new Date(event.start);
@@ -26,27 +60,40 @@ const getEventPosition = (event) => {
 export const WeekCalendar = ({ events }) => {
   const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
   const [startOfWeek, setStartOfWeek] = useState(getStartOfWeek(new Date()));
+
+  // Current week dates
   const weekDates = Array.from({ length: 7 }, (_, i) => {
     const date = new Date(startOfWeek);
     date.setDate(startOfWeek.getDate() + i);
     return date;
   });
 
+
   return (
     <div className={styles.calendarContainer}>
       <div className={styles.calendarHeader}>
-        <button
-          className={styles.prev}
-          onClick={() => setStartOfWeek(addDays(startOfWeek, -7))}
-        >
-          Prev
-        </button>
-        <button
-          className={styles.next}
-          onClick={() => setStartOfWeek(addDays(startOfWeek, 7))}
-        >
-          Next
-        </button>
+        <div className={styles.calendarHeaderButtons}>
+          <button
+            className={styles.previousButton}
+            onClick={() => setStartOfWeek(addDays(startOfWeek, -7))}
+          >
+            Prev
+          </button>
+          <button
+            className={styles.todayButton}
+            onClick={() => setStartOfWeek(getStartOfWeek(new Date()))}
+          >
+            Today
+          </button>
+          <button
+            className={styles.nextButton}
+            onClick={() => setStartOfWeek(addDays(startOfWeek, 7))}
+          >
+            Next
+          </button>
+        </div>
+
+        <h2 className={styles.calendarMonth}>{getWeekHeader(weekDates)}</h2>
       </div>
       <div className={styles.calendarGrid}>
         <div className={styles.timeColumn}>
@@ -60,7 +107,12 @@ export const WeekCalendar = ({ events }) => {
         </div>
 
         {weekDates.map((date, dayIndex) => (
-          <div key={date} className={styles.dayColumn}>
+          <div
+            key={date}
+            className={`${styles.dayColumn} ${
+              date.toDateString() === new Date().toDateString() ? styles.todayColumn : ""
+            }`}
+          >
             <div className={styles.dayHeader}>
               <div className={styles.dayLabel}>
                 {weekDates[dayIndex].toLocaleDateString("en-US", {
@@ -74,8 +126,8 @@ export const WeekCalendar = ({ events }) => {
             <div className={styles.headerGap}></div>
 
             <div className={styles.timeCellsContainer}>
-              {hours.map((_, hourIndex) => (
-                <div key={hourIndex} className={styles.timeCell}></div>
+              {hours.map(() => (
+                <div key={date} className={styles.timeCell}></div>
               ))}
 
               {/* ---------------Fill in Events--------------- */}

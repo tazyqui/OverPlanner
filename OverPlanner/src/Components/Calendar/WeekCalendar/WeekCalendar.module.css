@@ -8,6 +8,37 @@
     flex-direction: column;
 }
 
+.calendarHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 50px;
+    padding: 0 1rem;
+    border-bottom: 1px solid #ccc;
+}
+
+.calendarHeaderButtons {
+    display: absolute;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.previousButton {}
+
+.nextButton {}
+
+
+
+.calendarMonth {
+    margin: 0;
+    font-size: 1.5rem;
+    text-align: center;
+    flex-grow: 1;
+}
+
 .calendarGrid {
     display: grid;
     grid-template-columns: 80px repeat(7, 1fr);
@@ -56,6 +87,13 @@
     position: relative;
 }
 
+.todayColumn {
+    background-color: rgba(57, 45, 191, 0.1);
+    border-left: 2px solid rgba(162, 45, 191, 0.1);
+    border-right: 2px solid rgba(162, 45, 191, 0.1);
+}
+
+
 .dayHeader {
     position: sticky;
     top: 0;
@@ -87,7 +125,6 @@
     height: var(--row-height);
     border-bottom: 3px solid #eee;
     border-right: 3px solid #eee;
-    background-color: #fafafa;
     transition: background-color 0.2s;
 }
 
